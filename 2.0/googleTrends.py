@@ -1,3 +1,9 @@
+'''
+Authon: MrYanc
+Version: 3.5
+Date: 11/01/2017
+'''
+
 import threading
 from pytrends.request import TrendReq
 import pandas as pd
