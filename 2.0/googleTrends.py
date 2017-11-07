@@ -117,6 +117,11 @@ def googleTrends(keyword, directory):
     for t in threads:
         t.join();
 
+'''
+input: directory: string
+output: csv file
+exception:
+'''
 def test(directory):
     name = 'AACE';
     googleTrends(name, directory);
@@ -130,6 +135,11 @@ def test(directory):
     # googleTrends('AAPL', directory);
     # googleTrends('AMZN', directory);
 
+'''
+input: filename: string; file: dataframe; directory: string
+output: csv file
+exception:
+'''
 def main(filename, file, directory):
     for index, row in file.iterrows():
         try:
