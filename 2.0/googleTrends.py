@@ -49,13 +49,9 @@ class myThread (threading.Thread):
             print("Thread "+str(self.count)+" "+self.timeframe+" goes wrong.");
             print(e);
             print("Retry downloading "+"Thread "+str(self.count)+" "+self.timeframe);
-            try:
-                request_lock.acquire();
-                time.sleep(10);
-                interest = self.download(keyword_list);
-                return interest;
-            finally:
-                request_lock.release();
+            time.sleep(10);
+            interest = self.download(keyword_list);
+            return interest;
         else:
             # get the dataframe of interest
             interest = self.pytrend.interest_over_time();
