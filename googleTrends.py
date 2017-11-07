@@ -44,12 +44,13 @@ def saveSymbol(finished, file, filename):
 		file.to_excel(filename);
 
 if __name__ == "__main__":
+	# test
+	# googleTrends('IBM', directory);
+	
 	filename = "D:/Symbol.xlsx";
 	file = pd.read_excel(filename);
 	directory = 'D:/Stock';
 	finished = [];
-	# test
-	# googleTrends('IBM', directory);
 	
 	for index, row in file.iterrows():
 		try:
