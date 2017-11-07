@@ -1,0 +1,119 @@
+import threading
+from pytrends.request import TrendReq
+import pandas as pd
+import datetime
+import time
+
+result = [];
+finished = [];
+result_lock = threading.Lock();
+request_lock = threading.Lock();
+
+class myThread (threading.Thread):
+
+    def __init__(self, keyword, timeframe, count):
+        threading.Thread.__init__(self);
+        # python google trend tool
+        self.pytrend = TrendReq();
+        # search keyword
+        self.keyword = keyword;
+        # start time
+        self.timeframe = timeframe;
+        # thread count
+        self.count = count;
+        print("Thread "+str(self.count)+" "+self.timeframe+" is starting.");
+        
+    def run(self):
+    	# create keyword list
+    	keyword_list = [];
+    	keyword_list.append(self.keyword);
+    	try:
+    		try:
+    			request_lock.acquire();
+		    	# call google trend api
+		    	self.pytrend.build_payload(kw_list=keyword_list, cat=0, timeframe=self.timeframe, geo='', gprop='');
+		    	time.sleep(1);
+    		finally:
+    			request_lock.release();
+	    	# get the dataframe of interest
+	    	interest = self.pytrend.interest_over_time();
+    	except Exception as e:
+    		# catch thread in exception
+    		print("Thread "+str(self.count)+" "+self.timeframe+" is wrong.");
+    		raise Exception('Downloading error');
+    	else:
+    		# global result
+	    	global result;
+	    	try:
+	    		result_lock.acquire();
+		    	# add interest to result list
+		    	result.append(interest);
+		    	print("Thread "+str(self.count)+" "+self.timeframe+" is finished.");
+	    	finally:
+	    		result_lock.release();
+	    	
+def googleTrends(keyword, directory):
+	# create time frame
+	time_frame = [];
+	for i in range(2004, 2017):
+		time_frame.append(str(i)+'-01-01 '+str(i)+'-06-30');
+		time_frame.append(str(i)+'-07-01 '+str(i)+'-12-31');
+
+	time_frame.append('2017-01-01 2017-06-30');
+	time_frame.append('2017-07-01 '+str(datetime.date.today()));
+	# create threads list
+	threads = [];
+	# thread counter
+	cnt = 0;
+
+	global result;
+	result = [];
+	# create threads
+	for f in time_frame:
+		thread = myThread(keyword, f, cnt);
+		threads.append(thread);
+		cnt = cnt + 1;
+
+	# start thread
+	counter = 1;
+	for t in threads:
+		if(counter % 5 == 0):
+			time.sleep(1);
+		counter = counter + 1;
+		t.start();
+
+	# finish thread work
+	for t in threads:
+		t.join();
+
+if __name__ == "__main__":
+	filename = "D:/Symbol.xlsx";
+	file = pd.read_excel(filename);
+	directory = 'D:/Stock';
+	# test
+	# googleTrends('IBM', directory);
+	
+	for index, row in file.iterrows():
+		try:
+			print('Start downloading ' + row['Symbol']);
+			googleTrends(row['Symbol'], directory);
+		except Exception as e:
+			print(e);
+			# print('Failed downloading ' + row['Symbol']);
+			# continue;
+		except KeyboardInterrupt:
+			print('Finished symbol count: ' + str(len(finished)));
+			# delete finished symbol in the file
+			for f in finished:
+				file = file[file.Symbol != f];
+				file.to_excel(filename);
+		else:
+			# convert result list to dataframe
+			df = pd.concat(result);
+			# sort on date
+			df = df.sort_index();
+			# save finished keyword to finished list
+			finished.append(keyword);
+			# save to file directory
+			df.to_csv(directory+'/'+row['Symbol']+'.csv');
+			print('Finished downloading ' + row['Symbol']);
