@@ -1,1 +1,1 @@
-GoogleTrends
+Google Trends
