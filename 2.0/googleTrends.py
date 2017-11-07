@@ -45,7 +45,7 @@ class myThread (threading.Thread):
             # call google trend api
             self.pytrend.build_payload(kw_list=keyword_list, cat=0, timeframe=self.timeframe, geo='', gprop='');
 
-        except (Exception, OSError) as e:
+        except (Exception, OSError, requests.ConnectionError) as e:
             print("Thread "+str(self.count)+" "+self.timeframe+" goes wrong.");
             print(e);
             print("Retry downloading "+"Thread "+str(self.count)+" "+self.timeframe);
@@ -98,14 +98,15 @@ def googleTrends(keyword, directory):
         t.join();
 
 def test(directory):
-    googleTrends('IBM', directory);
+    name = 'AACE';
+    googleTrends(name, directory);
     # convert result list to dataframe
     df = pd.concat(result);
     # sort on date
     df = df.sort_index();
     # save to file directory
-    df.to_csv(directory+'/'+'IBM'+'.csv');
-    print('Finished downloading '+'IBM');
+    df.to_csv(directory+'/'+name+'.csv');
+    print('Finished downloading '+name);
     # googleTrends('AAPL', directory);
     # googleTrends('AMZN', directory);
 
