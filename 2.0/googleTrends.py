@@ -35,17 +35,30 @@ class myThread (threading.Thread):
         keyword_list = [];
         keyword_list.append(self.keyword);
 
-        interest = self.download(keyword_list);
+        # time sleep 1 sec between each request
+        try:
+            request_lock.acquire();
+            time.sleep(1);
+            interest = self.download(keyword_list);
+        finally:
+            request_lock.release();
+
         # global result
         global result;
         try:
             result_lock.acquire();
             # add interest to result list
-            result.append(interest);
+            if (interest != None):
+                result.append(interest);
             print("Thread "+str(self.count)+" "+self.timeframe+" is finished.");
         finally:
             result_lock.release();
 
+    '''
+    input: search keyword list: string list
+    output: interest dataframe
+    exception: connection abortion
+    '''
     def download(self, keyword_list):
         try:
             # call google trend api
@@ -65,6 +78,11 @@ class myThread (threading.Thread):
         finally:
             pass;
 
+'''
+input: search keyword: string; file directory: string
+output: dataframe list
+exception: connection abortion
+'''
 def googleTrends(keyword, directory):
     # create time frame
     time_frame = [];
