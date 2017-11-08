@@ -10,6 +10,7 @@ import pandas as pd
 import datetime
 import time
 import requests
+import random
 
 result = [];
 finished = [];
@@ -34,11 +35,13 @@ class myThread (threading.Thread):
         # create keyword list
         keyword_list = [];
         keyword_list.append(self.keyword);
-
-        # time sleep 1 sec between each request
+        
+        # random select sleep time
+        sleep_time = random.randint(1, 6);
+        # time sleep between each request
         try:
             request_lock.acquire();
-            time.sleep(1);
+            time.sleep(sleep_time);
             interest = self.download(keyword_list);
         finally:
             request_lock.release();
