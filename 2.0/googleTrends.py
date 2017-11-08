@@ -71,7 +71,9 @@ class myThread (threading.Thread):
             print("Thread "+str(self.count)+" "+self.timeframe+" goes wrong.");
             print(e);
             print("Retry downloading "+"Thread "+str(self.count)+" "+self.timeframe);
-            time.sleep(10);
+            # random select sleep time
+            sleep_time = random.randint(1, 10);
+            time.sleep(sleep_time);
             interest = self.download(keyword_list);
             return interest;
         else:
