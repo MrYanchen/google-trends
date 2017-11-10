@@ -37,7 +37,7 @@ class myThread (threading.Thread):
         keyword_list.append(self.keyword);
         
         # random select sleep time
-        sleep_time = random.randint(1, 6);
+        sleep_time = random.randint(10, 30);
         # time sleep between each request
         try:
             request_lock.acquire();
@@ -72,7 +72,7 @@ class myThread (threading.Thread):
             print(e);
             print("Retry downloading "+"Thread "+str(self.count)+" "+self.timeframe);
             # random select sleep time
-            sleep_time = random.randint(1, 10);
+            sleep_time = random.randint(10, 30);
             time.sleep(sleep_time);
             interest = self.download(keyword_list);
             return interest;
