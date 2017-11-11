@@ -15,7 +15,7 @@ import random
 result = [];
 finished = [];
 result_lock = threading.Lock();
-request_lock = threading.Lock();
+sema = threading.Semaphore(5);
 
 class myThread (threading.Thread):
 
@@ -37,14 +37,11 @@ class myThread (threading.Thread):
         keyword_list.append(self.keyword);
         
         # random select sleep time
-        sleep_time = random.randint(10, 30);
+        sleep_time = random.randint(5, 10);
         # time sleep between each request
-        try:
-            request_lock.acquire();
-            time.sleep(sleep_time);
-            interest = self.download(keyword_list);
-        finally:
-            request_lock.release();
+        with sema:
+        	interest = self.download(keyword_list);
+        	time.sleep(sleep_time);
 
         # global result
         global result;
