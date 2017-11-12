@@ -48,8 +48,7 @@ class myThread (threading.Thread):
         try:
             result_lock.acquire();
             # add interest to result list
-            if (interest != None):
-                result.append(interest);
+            result.append(interest);
             print("Thread "+str(self.count)+" "+self.timeframe+" is finished.");
         finally:
             result_lock.release();
