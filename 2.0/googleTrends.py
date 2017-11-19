@@ -11,13 +11,14 @@ import datetime
 import time
 import requests
 import random
+import os
 
 result = [];
 finished = [];
 result_lock = threading.Lock();
 sema = threading.Semaphore(5);
 
-class myThread (threading.Thread):
+class myThread(threading.Thread):
 
     def __init__(self, keyword, timeframe, count):
         threading.Thread.__init__(self);
@@ -165,9 +166,10 @@ def main(filename, file, directory):
             print('Finished downloading '+row['Symbol']);
 
 if __name__ == "__main__":
-    filename = "D:/Symbol.xlsx";
-    file = pd.read_excel(filename);
-    directory = 'D:/Stock';
+    filename = "Symbol.xlsx";
+    filepath = os.path.join(os.getcwd(), filename);
+    file = pd.read_excel(filepath);
+    directory = os.path.join(os.getcwd(), 'Stock');
     
     # test
     # test(directory);
