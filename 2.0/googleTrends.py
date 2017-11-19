@@ -166,10 +166,15 @@ def main(filename, file, directory):
             print('Finished downloading '+row['Symbol']);
 
 if __name__ == "__main__":
+	# input file
     filename = "Symbol.xlsx";
     filepath = os.path.join(os.getcwd(), filename);
     file = pd.read_excel(filepath);
+    
+    # output directory
     directory = os.path.join(os.getcwd(), 'Stock');
+    if(not os.path.exists(directory)):
+    	os.makedirs(directory);
     
     # test
     # test(directory);
