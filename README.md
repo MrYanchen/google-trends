@@ -4,4 +4,7 @@ Retrive data from up to 14000 stock symbol and save files<br>
 <br>
 1.0: Single thread to retrive data from google trends<br>
 2.0: Multiple threads to retrive data from google trends<br>
-3.0: Multiple threads to retrive data from google trends, automatically change proxy server after approximately 1500 requests, get proxy server list from https://www.us-proxy.org/<br>
+3.0: Multiple threads to retrive data from google trends<br>
+     automatically change proxy server address to stop block from google<br>
+     because google will block the request after approximately 1500 requests<br>
+     get proxy server list from https://www.us-proxy.org/<br>
