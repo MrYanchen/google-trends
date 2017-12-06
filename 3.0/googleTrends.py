@@ -125,7 +125,7 @@ def googleTrends(keyword, directory):
 '''
 input: directory: string
 output: csv file
-exception:
+exception: directory not found exception
 '''
 def test(directory):
 	name = 'AACE';
@@ -139,6 +139,27 @@ def test(directory):
 	print('Finished downloading '+name);
 	# googleTrends('AAPL', directory);
 	# googleTrends('AMZN', directory);
+
+'''
+input: directory: string
+output: csv file
+exception: directory not found exception
+'''
+def sum_file(filepath):
+	# list all files in the directory
+	list = os.listdir(filepath);
+	result = pd.DataFrame();
+	# add single file to the summary DataFrame
+	for l in list:
+	    file = pd.read_csv(os.path.join(filepath, l));
+	    # set date as the index
+	    file.set_index('date', inplace=True);
+	    # drop isPartial column
+	    file.drop(['isPartial'], axis = 1, inplace = True);
+	    result = pd.concat([file, result], axis=1);
+	# save file
+	result.to_csv(os.path.join(filepath, "result.csv"));
+	pass
 
 '''
 input: filename: string; file: dataframe; directory: string

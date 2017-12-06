@@ -41,7 +41,7 @@ def proxyList():
 		for idx in range(1, len(proxy)):
 			ip = proxy[idx];
 			tds = ip.findAll("td");
-			if(tds[4].contents[0] == 'elite proxy'):
+			if(tds[4].contents[0] == 'transparent'):
 				temp = tds[0].contents[0]+":"+tds[1].contents[0];
 				ips.append(temp);
 				pass;
