@@ -1,5 +1,5 @@
 '''
-Authon: MrYanc
+Author: MrYanc
 Version: 3.5
 Date: 11/17/2017
 '''
